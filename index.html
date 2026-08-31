@@ -6,7 +6,11 @@
   <title>Radar 10K+ — Planejador de Metas — Altus Edu</title>
   
   <link rel="icon" type="image/png" href="logo.png">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Radar 10K+">
 
   <style>
     :root {
@@ -81,7 +85,7 @@
     .sidebar-top {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
 
     .brand-container {
@@ -105,7 +109,7 @@
       letter-spacing: 0.5px;
     }
 
-    .theme-toggle-btn {
+    .btn-action-sidebar {
       background: rgba(249, 115, 22, 0.1);
       border: 1px solid var(--border-color);
       color: var(--text-main);
@@ -118,6 +122,23 @@
       width: 100%;
       transition: all 0.2s;
     }
+
+    .btn-install-pwa {
+      background: var(--accent-orange);
+      color: #fff;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-install-pwa:hover { opacity: 0.9; }
 
     .banner-cta {
       background: rgba(249, 115, 22, 0.08);
@@ -505,7 +526,9 @@
           <img src="logo.png" alt="Logo Radar 10K+" class="brand-logo" onerror="this.style.display='none'">
           <div class="brand-title">📡 RADAR 10K+</div>
         </div>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="btn-theme-text">☀️ Modo Claro</button>
+        
+        <button class="btn-install-pwa" id="btn-pwa-install" style="display: none;" onclick="instalarPWA()">📲 Instalar App no Celular</button>
+        <button class="btn-action-sidebar" onclick="toggleTheme()" id="btn-theme-text">☀️ Modo Claro</button>
       </div>
 
       <div class="banner-cta">
@@ -614,6 +637,25 @@
 
   <script>
     const API_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbx1gqcdz3eCkLRn3uT421BgUXMqskEFf9R5DAuCMfgpmTt2z4Ej_YU3xK0Mk8Q-cLd2zA/exec";
+    let pwaPromptEvent = null;
+
+    // SUPORTE A INSTALAÇÃO DO APP (PWA)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      pwaPromptEvent = e;
+      const btnPwa = document.getElementById('btn-pwa-install');
+      if (btnPwa) btnPwa.style.display = 'block';
+    });
+
+    async function instalarPWA() {
+      if (!pwaPromptEvent) return;
+      pwaPromptEvent.prompt();
+      const choice = await pwaPromptEvent.userChoice;
+      if (choice.outcome === 'accepted') {
+        document.getElementById('btn-pwa-install').style.display = 'none';
+      }
+      pwaPromptEvent = null;
+    }
 
     function toggleTheme() {
       document.body.classList.toggle('light-theme');
