@@ -140,15 +140,15 @@
 
     .btn-install-pwa:hover { opacity: 0.9; }
 
-    /* CTA UPGRADE INTERATIVO */
+    /* BANNER CTA REATIVO & MINIMIZÁVEL */
     .banner-cta {
-      background: rgba(249, 115, 22, 0.08);
+      background: rgba(249, 115, 22, 0.1);
       border: 1px dashed var(--accent-orange);
       padding: 18px;
       border-radius: 12px;
       text-align: center;
       position: relative;
-      transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease;
     }
 
     .banner-cta-header {
@@ -161,25 +161,30 @@
     .banner-cta h4 {
       margin: 0;
       color: var(--accent-orange);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 800;
       text-align: left;
     }
 
     .btn-minimize-cta {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.1);
       border: none;
       color: var(--text-muted);
-      font-size: 0.75rem;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
       cursor: pointer;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: background 0.2s;
     }
 
     .btn-minimize-cta:hover {
-      background: rgba(255,255,255,0.1);
-      color: var(--text-main);
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--accent-red);
     }
 
     .banner-cta p {
@@ -205,30 +210,28 @@
 
     .btn-upgrade:hover { opacity: 0.9; }
 
-    /* ESTADO MINIMIZADO DO CTA */
-    .banner-cta-minimized {
-      background: rgba(249, 115, 22, 0.12);
-      border: 1px solid var(--accent-orange);
-      padding: 10px 14px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .banner-cta-minimized:hover {
-      background: rgba(249, 115, 22, 0.22);
-    }
-
-    .banner-cta-minimized span {
-      color: var(--accent-orange);
+    /* BOTÃO DE REABRIR O UPGRADE (QUANDO MINIMIZADO) */
+    .btn-minimized-upgrade {
+      display: none;
+      background: var(--accent-orange);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 20px;
       font-weight: 800;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+      animation: pulseBtn 2s infinite;
+      margin-top: 10px;
+      text-align: center;
+      width: 100%;
+    }
+
+    @keyframes pulseBtn {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
     }
 
     .main-content {
@@ -585,18 +588,17 @@
         <button class="btn-action-sidebar" onclick="toggleTheme()" id="btn-theme-text">☀️ Modo Claro</button>
       </div>
 
-      <div class="banner-cta" id="cta-full-container">
-        <div class="banner-cta-header">
-          <h4>🚀 Quer automatizar seu controle diário?</h4>
-          <button class="btn-minimize-cta" onclick="toggleCta(true)" title="Minimizar">✖ Minimizar</button>
+      <div>
+        <div class="banner-cta" id="box-banner-cta">
+          <div class="banner-cta-header">
+            <h4>🚀 Radar 10K+ Full</h4>
+            <button class="btn-minimize-cta" onclick="minimizarCTA()" title="Minimizar">✕</button>
+          </div>
+          <p>Automatize seu controle diário com rastreamento de comissões em tempo real, simulação de descontos e sincronização.</p>
+          <a href="https://sun.eduzz.com/8WPND45N0P" class="btn-upgrade" target="_blank">Conhecer Radar 10K+ Full</a>
         </div>
-        <p>Conheça a versão completa com rastreamento de comissões em tempo real, simulação de descontos e sincronização.</p>
-        <a href="https://sun.eduzz.com/8WPND45N0P" class="btn-upgrade">Conhecer Radar 10K+ Full</a>
-      </div>
 
-      <div class="banner-cta-minimized" id="cta-minimized-container" style="display: none;" onclick="toggleCta(false)">
-        <span>⭐ Upgrade Radar Full</span>
-        <span style="font-size: 0.75rem; opacity: 0.8;">▲ Expandir</span>
+        <button class="btn-minimized-upgrade" id="btn-minimized-cta" onclick="expandirCTA()">🚀 Fazer Upgrade (Radar Full)</button>
       </div>
     </div>
 
@@ -701,20 +703,18 @@
     const API_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbx1gqcdz3eCkLRn3uT421BgUXMqskEFf9R5DAuCMfgpmTt2z4Ej_YU3xK0Mk8Q-cLd2zA/exec";
     let pwaPromptEvent = null;
 
-    // CONTROLE DE EXPANSÃO / MINIMIZAÇÃO DO CTA
-    function toggleCta(minimize) {
-      const fullCta = document.getElementById('cta-full-container');
-      const minCta = document.getElementById('cta-minimized-container');
-      if (minimize) {
-        fullCta.style.display = 'none';
-        minCta.style.display = 'flex';
-      } else {
-        fullCta.style.display = 'block';
-        minCta.style.display = 'none';
-      }
+    // CONTROLE DE MINIMIZAR / EXPANDIR O BANNER DE UPGRADE
+    function minimizarCTA() {
+      document.getElementById('box-banner-cta').style.display = 'none';
+      document.getElementById('btn-minimized-cta').style.display = 'block';
     }
 
-    // PWA INSTALLER
+    function expandirCTA() {
+      document.getElementById('box-banner-cta').style.display = 'block';
+      document.getElementById('btn-minimized-cta').style.display = 'none';
+    }
+
+    // SUPORTE A INSTALAÇÃO DO APP (PWA)
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       pwaPromptEvent = e;
