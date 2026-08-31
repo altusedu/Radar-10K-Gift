@@ -278,7 +278,6 @@
       font-size: 0.8rem;
     }
 
-    /* MODAL DE ONBOARDING */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -406,9 +405,15 @@
           <input type="text" id="ob-nome" required placeholder="Seu nome completo">
         </div>
 
-        <div class="input-field">
-          <label for="ob-email">Seu Melhor E-mail *</label>
-          <input type="email" id="ob-email" required placeholder="seuemail@exemplo.com">
+        <div class="modal-grid">
+          <div class="input-field">
+            <label for="ob-email">Seu Melhor E-mail *</label>
+            <input type="email" id="ob-email" required placeholder="seuemail@exemplo.com">
+          </div>
+          <div class="input-field">
+            <label for="ob-telefone">WhatsApp (DDD) *</label>
+            <input type="tel" id="ob-telefone" required placeholder="(45) 99999-9999" oninput="mascaraTelefone(this)">
+          </div>
         </div>
 
         <div class="modal-grid">
@@ -634,6 +639,21 @@
       input.value = "R$ " + v;
     }
 
+    function mascaraTelefone(input) {
+      let v = input.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 10) {
+        v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+      } else if (v.length > 5) {
+        v = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, "($1) $2-$3");
+      } else if (v.length > 2) {
+        v = v.replace(/^(\d{2})(\d{0,5})$/, "($1) $2");
+      } else {
+        v = v.replace(/^(\d*)$/, "($1");
+      }
+      input.value = v;
+    }
+
     function calcularPlanejamento() {
       const salarioPretendido = parseMoedaFloat(document.getElementById('salario-pretendido').value);
       const salarioFixo = parseMoedaFloat(document.getElementById('salario-fixo').value);
@@ -665,7 +685,7 @@
     }
 
     function verificarOnboarding() {
-      const statusOnboarding = localStorage.getItem('altus_radar_free_v2_ok');
+      const statusOnboarding = localStorage.getItem('altus_radar_free_v3_ok');
       if (statusOnboarding !== 'true') {
         const modal = document.getElementById('modal-onboarding');
         if (modal) {
@@ -684,6 +704,7 @@
         action: "salvar_onboarding",
         nome: document.getElementById('ob-nome').value,
         email: document.getElementById('ob-email').value,
+        telefone: document.getElementById('ob-telefone').value,
         cidade: document.getElementById('ob-cidade').value,
         estado: document.getElementById('ob-estado').value,
         segmento: document.getElementById('ob-segmento').value,
@@ -702,7 +723,7 @@
           body: JSON.stringify(payload)
         });
 
-        localStorage.setItem('altus_radar_free_v2_ok', 'true');
+        localStorage.setItem('altus_radar_free_v3_ok', 'true');
         document.getElementById('modal-onboarding').style.display = 'none';
       } catch (err) {
         alert("Erro ao conectar. Tente novamente.");
@@ -711,7 +732,6 @@
       }
     }
 
-    // Execução Garantida Direta no DOM
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function() {
         calcularPlanejamento();
