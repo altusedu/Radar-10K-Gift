@@ -65,7 +65,6 @@
       width: 100vw;
     }
 
-    /* SIDEBAR / TOPBAR MOBILE */
     .sidebar {
       width: 280px;
       background-color: var(--card-bg);
@@ -156,7 +155,6 @@
 
     .btn-upgrade:hover { opacity: 0.9; }
 
-    /* CONTEÚDO PRINCIPAL */
     .main-content {
       flex: 1;
       padding: 35px 40px;
@@ -186,7 +184,6 @@
       gap: 8px;
     }
 
-    /* FORMULÁRIO E INPUTS */
     .form-container {
       background: var(--card-bg);
       padding: 24px;
@@ -232,7 +229,6 @@
       height: 48px;
     }
 
-    /* CARDS DE RESULTADOS */
     .grid-cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -282,17 +278,17 @@
       font-size: 0.8rem;
     }
 
-    /* MODAL DE ONBOARDING */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.94);
       backdrop-filter: blur(8px);
       z-index: 9999;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto;
     }
 
     .modal-card {
@@ -300,12 +296,13 @@
       border: 1px solid var(--accent-orange);
       border-radius: 16px;
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       padding: 30px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
       display: flex;
       flex-direction: column;
       gap: 16px;
+      margin: auto;
     }
 
     .modal-card h3 {
@@ -368,7 +365,6 @@
 
     .btn-submit-onboarding:hover { opacity: 0.9; }
 
-    /* RESPONSIVIDADE MOBILE */
     @media (max-width: 1024px) {
       .form-grid { grid-template-columns: repeat(2, 1fr); }
       .grid-cards { grid-template-columns: repeat(2, 1fr); }
@@ -396,16 +392,20 @@
 </head>
 <body>
 
-  <!-- MODAL ONBOARDING ETAPA 2 (PREENCHIMENTO RÁPIDO) -->
   <div class="modal-overlay" id="modal-onboarding" style="display: none;">
     <div class="modal-card">
-      <h3>📡 Bem-vindo ao Radar 10K+!</h3>
-      <p>Para personalizar suas calculadoras e liberar o simulador completo, responda a 4 perguntas rápidas de perfil:</p>
+      <h3>📡 Liberar Acesso ao Radar 10K+</h3>
+      <p>Preencha seus dados de perfil uma única vez para liberar suas calculadoras e simuladores de metas comerciais:</p>
       
       <form id="form-onboarding" onsubmit="salvarOnboarding(event)" style="display: flex; flex-direction: column; gap: 14px;">
         
         <div class="input-field">
-          <label for="ob-email">Seu E-mail Cadastrado na Eduzz *</label>
+          <label for="ob-nome">Nome Completo *</label>
+          <input type="text" id="ob-nome" required placeholder="Seu nome completo">
+        </div>
+
+        <div class="input-field">
+          <label for="ob-email">Seu Melhor E-mail *</label>
           <input type="email" id="ob-email" required placeholder="seuemail@exemplo.com">
         </div>
 
@@ -432,7 +432,7 @@
         </div>
 
         <div class="input-field">
-          <label for="ob-segmento">Segmento de Atuação *</label>
+          <label for="ob-segmento">Segmento Comercial de Atuação *</label>
           <select id="ob-segmento" required onchange="checarSegmentoOutro(this)">
             <option value="">Selecione seu segmento...</option>
             <option value="Servicos Financeiros, Seguros & Consorcios">Serviços Financeiros, Seguros & Consórcios</option>
@@ -492,7 +492,6 @@
   </div>
 
   <div class="app-container">
-    <!-- SIDEBAR / HEADER FIXO MOBILE -->
     <div class="sidebar">
       <div class="sidebar-top">
         <div class="brand-container" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
@@ -509,13 +508,11 @@
       </div>
     </div>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <div class="main-content">
       <div class="content-body">
         <h1>Calculadora & Planejador de Metas</h1>
         <p class="subtitle">Preencha seus dados de entrada para descobrir exatamente quanto você precisa vender e atender por dia para bater sua meta!</p>
 
-        <!-- SEÇÃO 1: ENTRADA DE DADOS -->
         <div class="section-title">✏️ 1. Dados de Entrada</div>
         <div class="form-container">
           <div class="form-grid">
@@ -559,7 +556,6 @@
           </div>
         </div>
 
-        <!-- SEÇÃO 2: RESULTADOS -->
         <div class="section-title">📊 2. Resultados & Metas Necessárias</div>
         <div class="grid-cards">
           
@@ -609,112 +605,9 @@
     </div>
   </div>
 
+  <!-- JAVASCRIPT TOTALMENTE OFUSCADO / CRIPTOGRAFADO -->
   <script>
-    // URL OFICIAL DA API DO GOOGLE APPS SCRIPT
-    const API_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbx1gqcdz3eCkLRn3uT421BgUXMqskEFf9R5DAuCMfgpmTt2z4Ej_YU3xK0Mk8Q-cLd2zA/exec";
-
-    function toggleTheme() {
-      document.body.classList.toggle('light-theme');
-      const isLight = document.body.classList.contains('light-theme');
-      document.getElementById('btn-theme-text').innerText = isLight ? '🌙 Modo Escuro' : '☀️ Modo Claro';
-    }
-
-    function parseMoedaFloat(str) {
-      if (typeof str === 'number') return str;
-      if (!str) return 0;
-      return parseFloat(str.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
-    }
-
-    function formatarMoeda(valor) {
-      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function mascaraMoedaInput(input) {
-      let v = input.value.replace(/\D/g, '');
-      v = (v / 100).toFixed(2) + '';
-      v = v.replace(".", ",");
-      v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-      input.value = "R$ " + v;
-    }
-
-    function calcularPlanejamento() {
-      const salarioPretendido = parseMoedaFloat(document.getElementById('salario-pretendido').value);
-      const salarioFixo = parseMoedaFloat(document.getElementById('salario-fixo').value);
-      const comissaoPct = (parseFloat(document.getElementById('comissao-media').value) || 0) / 100;
-      const conversaoPct = (parseFloat(document.getElementById('taxa-conversao-media').value) || 0) / 100;
-      const ticketMedio = parseMoedaFloat(document.getElementById('ticket-medio').value);
-      const diasTrabalhados = parseFloat(document.getElementById('dias-trabalhados').value) || 1;
-
-      let metaComissao = salarioPretendido - salarioFixo;
-      if (metaComissao < 0) metaComissao = 0;
-
-      let faturamentoNecessario = comissaoPct > 0 ? (metaComissao / comissaoPct) : 0;
-      let vendasMes = ticketMedio > 0 ? (faturamentoNecessario / ticketMedio) : 0;
-      let vendasDia = diasTrabalhados > 0 ? (vendasMes / diasTrabalhados) : 0;
-      let leadsMes = conversaoPct > 0 ? (vendasMes / conversaoPct) : 0;
-      let leadsDia = diasTrabalhados > 0 ? (leadsMes / diasTrabalhados) : 0;
-
-      document.getElementById('res-meta-comissao').innerText = formatarMoeda(metaComissao);
-      document.getElementById('res-meta-faturamento').innerText = formatarMoeda(faturamentoNecessario);
-      document.getElementById('res-vendas-mes').innerText = Math.round(vendasMes).toLocaleString('pt-BR');
-      document.getElementById('res-vendas-dia').innerText = vendasDia.toFixed(1).replace('.', ',');
-      document.getElementById('res-leads-mes').innerText = Math.round(leadsMes).toLocaleString('pt-BR');
-      document.getElementById('res-leads-dia').innerText = Math.round(leadsDia).toLocaleString('pt-BR');
-    }
-
-    /* ONBOARDING CONTROLLER */
-    function checarSegmentoOutro(select) {
-      const box = document.getElementById('box-segmento-outro');
-      box.style.display = select.value === "Outros" ? "flex" : "none";
-    }
-
-    function verificarOnboarding() {
-      const leadConcluido = localStorage.getItem('altus_radar_free_concluido');
-      if (!leadConcluido) {
-        document.getElementById('modal-onboarding').style.display = 'flex';
-      }
-    }
-
-    async function salvarOnboarding(e) {
-      e.preventDefault();
-      const btn = document.getElementById('btn-salvar-ob');
-      btn.disabled = true;
-      btn.innerText = "⏳ SALVANDO E LIBERANDO...";
-
-      const payload = {
-        action: "salvar_onboarding",
-        email: document.getElementById('ob-email').value,
-        cidade: document.getElementById('ob-cidade').value,
-        estado: document.getElementById('ob-estado').value,
-        segmento: document.getElementById('ob-segmento').value,
-        segmento_outro: document.getElementById('ob-segmento-outro').value,
-        faixa_renda: document.getElementById('ob-faixa-renda').value,
-        comissao_media: document.getElementById('ob-comissao').value,
-        aceite_lgpd: document.getElementById('ob-lgpd').checked
-      };
-
-      try {
-        await fetch(API_APPS_SCRIPT, {
-          method: 'POST',
-          mode: 'no-cors',
-          redirect: 'follow',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-
-        localStorage.setItem('altus_radar_free_concluido', 'true');
-        document.getElementById('modal-onboarding').style.display = 'none';
-      } catch (err) {
-        alert("Erro ao conectar. Tente novamente.");
-        btn.disabled = false;
-        btn.innerText = "🚀 LIBERAR MEU RADAR GRATUITO";
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      calcularPlanejamento();
-      verificarOnboarding();
-    });
+    var _0x21a4=['https://script.google.com/macros/s/AKfycbx1gqcdz3eCkLRn3uT421BgUXMqskEFf9R5DAuCMfgpmTt2z4Ej_YU3xK0Mk8Q-cLd2zA/exec','light-theme','btn-theme-text','🌙\x20Modo\x20Escuro','☀️\x20Modo\x20Claro','salario-pretendido','salario-fixo','comissao-media','taxa-conversao-media','ticket-medio','dias-trabalhados','res-meta-comissao','res-meta-faturamento','res-vendas-mes','res-vendas-dia','res-leads-mes','res-leads-dia','box-segmento-outro','Outros','altus_radar_free_concluido','modal-onboarding','btn-salvar-ob','⏳\x20SALVANDO\x20E\x20LIBERANDO...','salvar_onboarding','ob-nome','ob-email','ob-cidade','ob-estado','ob-segmento','ob-segmento-outro','ob-faixa-renda','ob-comissao','ob-lgpd','flex','none','pt-BR','currency','BRL','DOMContentLoaded'];(function(_0x38bf64,_0x21a4f0){var _0x43d3b7=function(_0x5c48ea){while(--_0x5c48ea){_0x38bf64['push'](_0x38bf64['shift']());}};_0x43d3b7(++_0x21a4f0);}(_0x21a4,0x1b4));var _0x43d3=function(_0x38bf64,_0x21a4f0){_0x38bf64=_0x38bf64-0x0;var _0x43d3b7=_0x21a4[_0x38bf64];return _0x43d3b7;};const API_APPS_SCRIPT=_0x43d3('0x0');function toggleTheme(){document['body']['classList']['toggle'](_0x43d3('0x1'));const _0x1c2b53=document['body']['classList']['contains'](_0x43d3('0x1'));document['getElementById'](_0x43d3('0x2'))['innerText']=_0x1c2b53?_0x43d3('0x3'):_0x43d3('0x4');}function parseMoedaFloat(_0x12c8b0){if(typeof _0x12c8b0==='number')return _0x12c8b0;if(!_0x12c8b0)return 00;return parseFloat(_0x12c8b0['replace'](/[^\d,-]/g,'')['replace'](',', '.'))||00;}function formatarMoeda(_0x3df0a2){return _0x3df0a2['toLocaleString'](_0x43d3('0x23'),{'style':_0x43d3('0x24'),'currency':_0x43d3('0x25')});}function mascaraMoedaInput(_0x52c92e){let _0x3e100e=_0x52c92e['value']['replace'](/\D/g,'');_0x3e100e=(_0x3e100e/0x64)['toFixed'](0x2)+'';_0x3e100e=_0x3e100e['replace']('.','\x2c');_0x3e100e=_0x3e100e['replace'](/(\d)(?=(\d{3})+(?!\d))/g,'$1.');_0x52c92e['value']='R$\x20'+_0x3e100e;}function calcularPlanejamento(){const _0x5ba829=parseMoedaFloat(document['getElementById'](_0x43d3('0x5'))['value']);const _0x3e2303=parseMoedaFloat(document['getElementById'](_0x43d3('0x6'))['value']);const _0x4ad70c=(parseFloat(document['getElementById'](_0x43d3('0x7'))['value'])||00)/0x64;const _0x317c24=(parseFloat(document['getElementById'](_0x43d3('0x8'))['value'])||00)/0x64;const _0x103bc4=parseMoedaFloat(document['getElementById'](_0x43d3('0x9'))['value']);const _0x5da8d1=parseFloat(document['getElementById'](_0x43d3('0xa'))['value'])||0x1;let _0x452bd0=_0x5ba829-_0x3e2303;if(_0x452bd0<00)_0x452bd0=00;let _0x53c907=_0x4ad70c>00?_0x452bd0/_0x4ad70c:00;let _0x2a3e8d=_0x103bc4>00?_0x53c907/_0x103bc4:00;let _0x1a8775=_0x5da8d1>00?_0x2a3e8d/_0x5da8d1:00;let _0x4876b3=_0x317c24>00?_0x2a3e8d/_0x317c24:00;let _0x4c2b9a=_0x5da8d1>00?_0x4876b3/_0x5da8d1:00;document['getElementById'](_0x43d3('0xb'))['innerText']=formatarMoeda(_0x452bd0);document['getElementById'](_0x43d3('0xc'))['innerText']=formatarMoeda(_0x53c907);document['getElementById'](_0x43d3('0xd'))['innerText']=Math['round'](_0x2a3e8d)['toLocaleString'](_0x43d3('0x23'));document['getElementById'](_0x43d3('0xe'))['innerText']=_0x1a8775['toFixed'](0x1)['replace']('.','\x2c');document['getElementById'](_0x43d3('0xf'))['innerText']=Math['round'](_0x4876b3)['toLocaleString'](_0x43d3('0x23'));document['getElementById'](_0x43d3('0x10'))['innerText']=Math['round'](_0x4c2b9a)['toLocaleString'](_0x43d3('0x23'));}function checarSegmentoOutro(_0x2b89b1){const _0x354ed5=document['getElementById'](_0x43d3('0x11'));_0x354ed5['style']['display']=_0x2b89b1['value']===_0x43d3('0x12')?_0x43d3('0x21'):_0x43d3('0x22');}function verificarOnboarding(){const _0x4a7e93=localStorage['getItem'](_0x43d3('0x13'));if(!_0x4a7e93){document['getElementById'](_0x43d3('0x14'))['style']['display']=_0x43d3('0x21');}}async function salvarOnboarding(_0x3cf3d7){_0x3cf3d7['preventDefault']();const _0x27ec1e=document['getElementById'](_0x43d3('0x15'));_0x27ec1e['disabled']=!00;_0x27ec1e['innerText']=_0x43d3('0x16');const _0x19dfa7={'action':_0x43d3('0x17'),'nome':document['getElementById'](_0x43d3('0x18'))['value'],'email':document['getElementById'](_0x43d3('0x19'))['value'],'cidade':document['getElementById'](_0x43d3('0x1a'))['value'],'estado':document['getElementById'](_0x43d3('0x1b'))['value'],'segmento':document['getElementById'](_0x43d3('0x1c'))['value'],'segmento_outro':document['getElementById'](_0x43d3('0x1d'))['value'],'faixa_renda':document['getElementById'](_0x43d3('0x1e'))['value'],'comissao_media':document['getElementById'](_0x43d3('0x1f'))['value'],'aceite_lgpd':document['getElementById'](_0x43d3('0x20'))['checked']};try{await fetch(API_APPS_SCRIPT,{'method':'POST','mode':'no-cors','redirect':'follow','headers':{'Content-Type':'text/plain;charset=utf-8'},'body':JSON['stringify'](_0x19dfa7)});localStorage['setItem'](_0x43d3('0x13'),'true');document['getElementById'](_0x43d3('0x14'))['style']['display']=_0x43d3('0x22');}catch(_0x4c2b53){alert('Erro\x20ao\x20conectar.\x20Tente\x20novamente.');_0x27ec1e['disabled']=!01;_0x27ec1e['innerText']='🚀\x20LIBERAR\x20MEU\x20RADAR\x20GRATUITO';}}document['addEventListener'](_0x43d3('0x26'),()=>{calcularPlanejamento();verificarOnboarding();});
   </script>
 </body>
 </html>
