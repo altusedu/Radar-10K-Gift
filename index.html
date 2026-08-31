@@ -6,7 +6,11 @@
   <title>Radar 10K+ — Planejador de Metas — Altus Edu</title>
   
   <link rel="icon" type="image/png" href="logo.png">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Radar 10K+">
 
   <style>
     :root {
@@ -65,7 +69,6 @@
       width: 100vw;
     }
 
-    /* SIDEBAR / TOPBAR MOBILE */
     .sidebar {
       width: 280px;
       background-color: var(--card-bg);
@@ -82,7 +85,7 @@
     .sidebar-top {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
 
     .brand-container {
@@ -106,7 +109,7 @@
       letter-spacing: 0.5px;
     }
 
-    .theme-toggle-btn {
+    .btn-action-sidebar {
       background: rgba(249, 115, 22, 0.1);
       border: 1px solid var(--border-color);
       color: var(--text-main);
@@ -120,18 +123,63 @@
       transition: all 0.2s;
     }
 
+    .btn-install-pwa {
+      background: var(--accent-orange);
+      color: #fff;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-install-pwa:hover { opacity: 0.9; }
+
+    /* CTA UPGRADE INTERATIVO */
     .banner-cta {
       background: rgba(249, 115, 22, 0.08);
       border: 1px dashed var(--accent-orange);
       padding: 18px;
       border-radius: 12px;
       text-align: center;
+      position: relative;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .banner-cta-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
     .banner-cta h4 {
-      margin: 0 0 8px 0;
+      margin: 0;
       color: var(--accent-orange);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .btn-minimize-cta {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .btn-minimize-cta:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-main);
     }
 
     .banner-cta p {
@@ -139,6 +187,7 @@
       color: var(--text-muted);
       margin: 0 0 14px 0;
       line-height: 1.4;
+      text-align: left;
     }
 
     .btn-upgrade {
@@ -156,7 +205,32 @@
 
     .btn-upgrade:hover { opacity: 0.9; }
 
-    /* CONTEÚDO PRINCIPAL */
+    /* ESTADO MINIMIZADO DO CTA */
+    .banner-cta-minimized {
+      background: rgba(249, 115, 22, 0.12);
+      border: 1px solid var(--accent-orange);
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .banner-cta-minimized:hover {
+      background: rgba(249, 115, 22, 0.22);
+    }
+
+    .banner-cta-minimized span {
+      color: var(--accent-orange);
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .main-content {
       flex: 1;
       padding: 35px 40px;
@@ -186,7 +260,6 @@
       gap: 8px;
     }
 
-    /* FORMULÁRIO E INPUTS */
     .form-container {
       background: var(--card-bg);
       padding: 24px;
@@ -232,7 +305,6 @@
       height: 48px;
     }
 
-    /* CARDS DE RESULTADOS */
     .grid-cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -282,17 +354,17 @@
       font-size: 0.8rem;
     }
 
-    /* MODAL DE ONBOARDING */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.96);
       backdrop-filter: blur(8px);
-      z-index: 9999;
+      z-index: 99999;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto;
     }
 
     .modal-card {
@@ -300,12 +372,13 @@
       border: 1px solid var(--accent-orange);
       border-radius: 16px;
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       padding: 30px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
       display: flex;
       flex-direction: column;
       gap: 16px;
+      margin: auto;
     }
 
     .modal-card h3 {
@@ -368,7 +441,6 @@
 
     .btn-submit-onboarding:hover { opacity: 0.9; }
 
-    /* RESPONSIVIDADE MOBILE */
     @media (max-width: 1024px) {
       .form-grid { grid-template-columns: repeat(2, 1fr); }
       .grid-cards { grid-template-columns: repeat(2, 1fr); }
@@ -396,23 +468,33 @@
 </head>
 <body>
 
-  <!-- MODAL ONBOARDING ETAPA 2 (PREENCHIMENTO RÁPIDO) -->
   <div class="modal-overlay" id="modal-onboarding" style="display: none;">
     <div class="modal-card">
-      <h3>📡 Bem-vindo ao Radar 10K+!</h3>
-      <p>Para personalizar suas calculadoras e liberar o simulador completo, responda a 4 perguntas rápidas de perfil:</p>
+      <h3>📡 Liberar Acesso ao Radar 10K+</h3>
+      <p>Preencha seus dados de perfil uma única vez para liberar suas calculadoras e simuladores de metas comerciais:</p>
       
       <form id="form-onboarding" onsubmit="salvarOnboarding(event)" style="display: flex; flex-direction: column; gap: 14px;">
         
         <div class="input-field">
-          <label for="ob-email">Seu E-mail Cadastrado na Eduzz *</label>
-          <input type="email" id="ob-email" required placeholder="seuemail@exemplo.com">
+          <label for="ob-nome">Nome Completo *</label>
+          <input type="text" id="ob-nome" required placeholder="Seu nome completo">
+        </div>
+
+        <div class="modal-grid">
+          <div class="input-field">
+            <label for="ob-email">Seu Melhor E-mail *</label>
+            <input type="email" id="ob-email" required placeholder="seuemail@exemplo.com">
+          </div>
+          <div class="input-field">
+            <label for="ob-telefone">WhatsApp (DDD) *</label>
+            <input type="tel" id="ob-telefone" required placeholder="(99) 99999-9999" oninput="mascaraTelefone(this)">
+          </div>
         </div>
 
         <div class="modal-grid">
           <div class="input-field">
             <label for="ob-cidade">Cidade *</label>
-            <input type="text" id="ob-cidade" required placeholder="Ex: Cascavel">
+            <input type="text" id="ob-cidade" required placeholder="Ex: São Paulo">
           </div>
           <div class="input-field">
             <label for="ob-estado">Estado *</label>
@@ -432,7 +514,7 @@
         </div>
 
         <div class="input-field">
-          <label for="ob-segmento">Segmento de Atuação *</label>
+          <label for="ob-segmento">Segmento Comercial de Atuação *</label>
           <select id="ob-segmento" required onchange="checarSegmentoOutro(this)">
             <option value="">Selecione seu segmento...</option>
             <option value="Servicos Financeiros, Seguros & Consorcios">Serviços Financeiros, Seguros & Consórcios</option>
@@ -492,30 +574,37 @@
   </div>
 
   <div class="app-container">
-    <!-- SIDEBAR / HEADER FIXO MOBILE -->
     <div class="sidebar">
       <div class="sidebar-top">
         <div class="brand-container" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
           <img src="logo.png" alt="Logo Radar 10K+" class="brand-logo" onerror="this.style.display='none'">
           <div class="brand-title">📡 RADAR 10K+</div>
         </div>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="btn-theme-text">☀️ Modo Claro</button>
+        
+        <button class="btn-install-pwa" id="btn-pwa-install" style="display: none;" onclick="instalarPWA()">📲 Instalar App no Celular</button>
+        <button class="btn-action-sidebar" onclick="toggleTheme()" id="btn-theme-text">☀️ Modo Claro</button>
       </div>
 
-      <div class="banner-cta">
-        <h4>🚀 Quer automatizar seu controle diário?</h4>
+      <div class="banner-cta" id="cta-full-container">
+        <div class="banner-cta-header">
+          <h4>🚀 Quer automatizar seu controle diário?</h4>
+          <button class="btn-minimize-cta" onclick="toggleCta(true)" title="Minimizar">✖ Minimizar</button>
+        </div>
         <p>Conheça a versão completa com rastreamento de comissões em tempo real, simulação de descontos e sincronização.</p>
         <a href="https://sun.eduzz.com/8WPND45N0P" class="btn-upgrade">Conhecer Radar 10K+ Full</a>
       </div>
+
+      <div class="banner-cta-minimized" id="cta-minimized-container" style="display: none;" onclick="toggleCta(false)">
+        <span>⭐ Upgrade Radar Full</span>
+        <span style="font-size: 0.75rem; opacity: 0.8;">▲ Expandir</span>
+      </div>
     </div>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <div class="main-content">
       <div class="content-body">
         <h1>Calculadora & Planejador de Metas</h1>
         <p class="subtitle">Preencha seus dados de entrada para descobrir exatamente quanto você precisa vender e atender por dia para bater sua meta!</p>
 
-        <!-- SEÇÃO 1: ENTRADA DE DADOS -->
         <div class="section-title">✏️ 1. Dados de Entrada</div>
         <div class="form-container">
           <div class="form-grid">
@@ -559,7 +648,6 @@
           </div>
         </div>
 
-        <!-- SEÇÃO 2: RESULTADOS -->
         <div class="section-title">📊 2. Resultados & Metas Necessárias</div>
         <div class="grid-cards">
           
@@ -610,8 +698,39 @@
   </div>
 
   <script>
-    // URL OFICIAL DA API DO GOOGLE APPS SCRIPT
     const API_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbx1gqcdz3eCkLRn3uT421BgUXMqskEFf9R5DAuCMfgpmTt2z4Ej_YU3xK0Mk8Q-cLd2zA/exec";
+    let pwaPromptEvent = null;
+
+    // CONTROLE DE EXPANSÃO / MINIMIZAÇÃO DO CTA
+    function toggleCta(minimize) {
+      const fullCta = document.getElementById('cta-full-container');
+      const minCta = document.getElementById('cta-minimized-container');
+      if (minimize) {
+        fullCta.style.display = 'none';
+        minCta.style.display = 'flex';
+      } else {
+        fullCta.style.display = 'block';
+        minCta.style.display = 'none';
+      }
+    }
+
+    // PWA INSTALLER
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      pwaPromptEvent = e;
+      const btnPwa = document.getElementById('btn-pwa-install');
+      if (btnPwa) btnPwa.style.display = 'block';
+    });
+
+    async function instalarPWA() {
+      if (!pwaPromptEvent) return;
+      pwaPromptEvent.prompt();
+      const choice = await pwaPromptEvent.userChoice;
+      if (choice.outcome === 'accepted') {
+        document.getElementById('btn-pwa-install').style.display = 'none';
+      }
+      pwaPromptEvent = null;
+    }
 
     function toggleTheme() {
       document.body.classList.toggle('light-theme');
@@ -635,6 +754,21 @@
       v = v.replace(".", ",");
       v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
       input.value = "R$ " + v;
+    }
+
+    function mascaraTelefone(input) {
+      let v = input.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 10) {
+        v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+      } else if (v.length > 5) {
+        v = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, "($1) $2-$3");
+      } else if (v.length > 2) {
+        v = v.replace(/^(\d{2})(\d{0,5})$/, "($1) $2");
+      } else {
+        v = v.replace(/^(\d*)$/, "($1");
+      }
+      input.value = v;
     }
 
     function calcularPlanejamento() {
@@ -662,16 +796,18 @@
       document.getElementById('res-leads-dia').innerText = Math.round(leadsDia).toLocaleString('pt-BR');
     }
 
-    /* ONBOARDING CONTROLLER */
     function checarSegmentoOutro(select) {
       const box = document.getElementById('box-segmento-outro');
       box.style.display = select.value === "Outros" ? "flex" : "none";
     }
 
     function verificarOnboarding() {
-      const leadConcluido = localStorage.getItem('altus_radar_free_concluido');
-      if (!leadConcluido) {
-        document.getElementById('modal-onboarding').style.display = 'flex';
+      const statusOnboarding = localStorage.getItem('altus_radar_free_v4_ok');
+      if (statusOnboarding !== 'true') {
+        const modal = document.getElementById('modal-onboarding');
+        if (modal) {
+          modal.style.display = 'flex';
+        }
       }
     }
 
@@ -683,7 +819,9 @@
 
       const payload = {
         action: "salvar_onboarding",
+        nome: document.getElementById('ob-nome').value,
         email: document.getElementById('ob-email').value,
+        telefone: document.getElementById('ob-telefone').value,
         cidade: document.getElementById('ob-cidade').value,
         estado: document.getElementById('ob-estado').value,
         segmento: document.getElementById('ob-segmento').value,
@@ -702,7 +840,7 @@
           body: JSON.stringify(payload)
         });
 
-        localStorage.setItem('altus_radar_free_concluido', 'true');
+        localStorage.setItem('altus_radar_free_v4_ok', 'true');
         document.getElementById('modal-onboarding').style.display = 'none';
       } catch (err) {
         alert("Erro ao conectar. Tente novamente.");
@@ -711,10 +849,15 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        calcularPlanejamento();
+        verificarOnboarding();
+      });
+    } else {
       calcularPlanejamento();
       verificarOnboarding();
-    });
+    }
   </script>
 </body>
 </html>
