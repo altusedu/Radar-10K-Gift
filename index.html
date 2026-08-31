@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Radar 10K+ — Planejador de Metas — Altus Edu</title>
+  
+  <link rel="icon" type="image/png" href="logo.png">
+  <meta name="theme-color" content="#0f172a">
+
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --accent-orange: #f97316;
+      --accent-blue: #3b82f6;
+      --accent-yellow: #eab308;
+      --accent-red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
+
+    body.light-theme {
+      --bg-dark: #f1f5f9;
+      --card-bg: #ffffff;
+      --accent-orange: #ea580c;
+      --accent-blue: #2563eb;
+      --accent-yellow: #ca8a04;
+      --accent-red: #dc2626;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    input, select, textarea {
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+    }
+
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+      width: 100vw;
+    }
+
+    /* SIDEBAR / TOPBAR MOBILE */
+    .sidebar {
+      width: 280px;
+      background-color: var(--card-bg);
+      border-right: 1px solid var(--border-color);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex-shrink: 0;
+      justify-content: space-between;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      max-height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      color: var(--accent-orange);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .theme-toggle-btn {
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-align: center;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    .banner-cta {
+      background: rgba(249, 115, 22, 0.08);
+      border: 1px dashed var(--accent-orange);
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .banner-cta h4 {
+      margin: 0 0 8px 0;
+      color: var(--accent-orange);
+      font-size: 0.95rem;
+    }
+
+    .banner-cta p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0 0 14px 0;
+      line-height: 1.4;
+    }
+
+    .btn-upgrade {
+      display: block;
+      background-color: var(--accent-orange);
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.85rem;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      transition: opacity 0.2s;
+    }
+
+    .btn-upgrade:hover { opacity: 0.9; }
+
+    /* CONTEÚDO PRINCIPAL */
+    .main-content {
+      flex: 1;
+      padding: 35px 40px;
+      overflow-y: auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    h1 { margin-top: 0; font-size: 1.8rem; }
+
+    .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      color: var(--accent-orange);
+      margin-bottom: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* FORMULÁRIO E INPUTS */
+    .form-container {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 35px;
+      transition: background-color 0.3s;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-field label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .input-field small {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+      line-height: 1.2;
+    }
+
+    input, select {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      width: 100%;
+      height: 48px;
+    }
+
+    /* CARDS DE RESULTADOS */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 35px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 120px;
+      transition: background-color 0.3s;
+    }
+
+    .card h4 {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      margin: 0 0 8px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .card .val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .card .val.orange { color: var(--accent-orange); }
+    .card .val.blue { color: var(--accent-blue); }
+    .card .val.yellow { color: var(--accent-yellow); }
+
+    .card small { color: var(--text-muted); font-size: 0.75rem; }
+
+    .app-footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* MODAL DE ONBOARDING */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--accent-orange);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-card h3 {
+      margin: 0;
+      color: var(--accent-orange);
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent-orange);
+      cursor: pointer;
+    }
+
+    .checkbox-container label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+      cursor: pointer;
+    }
+
+    .btn-submit-onboarding {
+      background: var(--accent-orange);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-submit-onboarding:hover { opacity: 0.9; }
+
+    /* RESPONSIVIDADE MOBILE */
+    @media (max-width: 1024px) {
+      .form-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .app-container { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 12px 15px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      }
+      .main-content { padding: 20px 15px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .grid-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .card .val { font-size: 1.3rem; }
+      .modal-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MODAL ONBOARDING ETAPA 2 (PREENCHIMENTO RÁPIDO) -->
+  <div class="modal-overlay" id="modal-onboarding" style="display: none;">
+    <div class="modal-card">
+      <h3>📡 Bem-vindo ao Radar 10K+!</h3>
+      <p>Para personalizar suas calculadoras e liberar o simulador completo, responda a 4 perguntas rápidas de perfil:</p>
+      
+      <form id="form-onboarding" onsubmit="salvarOnboarding(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        
+        <div class="input-field">
+          <label for="ob-email">Seu E-mail Cadastrado na Eduzz *</label>
+          <input type="email" id="ob-email" required placeholder="seuemail@exemplo.com">
+        </div>
+
+        <div class="modal-grid">
+          <div class="input-field">
+            <label for="ob-cidade">Cidade *</label>
+            <input type="text" id="ob-cidade" required placeholder="Ex: Cascavel">
+          </div>
+          <div class="input-field">
+            <label for="ob-estado">Estado *</label>
+            <select id="ob-estado" required>
+              <option value="">UF</option>
+              <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+              <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+              <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+              <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+              <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+              <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+              <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+              <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+              <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-field">
+          <label for="ob-segmento">Segmento de Atuação *</label>
+          <select id="ob-segmento" required onchange="checarSegmentoOutro(this)">
+            <option value="">Selecione seu segmento...</option>
+            <option value="Servicos Financeiros, Seguros & Consorcios">Serviços Financeiros, Seguros & Consórcios</option>
+            <option value="Mercado Imobiliario & Construcao Civil">Mercado Imobiliário & Construção Civil</option>
+            <option value="Automotivo & Concessionarias">Automotivo & Concessionárias</option>
+            <option value="Tecnologia, Software (SaaS) & Telecom">Tecnologia, Software (SaaS) & Telecom</option>
+            <option value="Varejo, Atacado & Bens de Consumo">Varejo, Atacado & Bens de Consumo</option>
+            <option value="Agronegocio, Maquinas & Equipamentos">Agronegócio, Máquinas & Equipamentos</option>
+            <option value="Saude, Estetica & Farmaceutica">Saúde, Estética & Farmacêutica</option>
+            <option value="Educacao, Cursos & Infoprodutos">Educação, Cursos & Infoprodutos</option>
+            <option value="Energia Solar & Solucoes Sustentaveis">Energia Solar & Soluções Sustentáveis</option>
+            <option value="Industria & Maquinas Industriais">Indústria & Máquinas Industriais</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+
+        <div class="input-field" id="box-segmento-outro" style="display: none;">
+          <label for="ob-segmento-outro">Especifique seu segmento (máx. 100 caracteres)</label>
+          <input type="text" id="ob-segmento-outro" maxlength="100" placeholder="Digite seu segmento comercial">
+        </div>
+
+        <div class="modal-grid">
+          <div class="input-field">
+            <label for="ob-faixa-renda">Faixa de Renda Mensal *</label>
+            <select id="ob-faixa-renda" required>
+              <option value="">Selecione...</option>
+              <option value="Ate R$ 3.000,00">Até R$ 3.000,00</option>
+              <option value="De R$ 3.000,01 a R$ 5.000,00">De R$ 3.000,01 a R$ 5.000,00</option>
+              <option value="De R$ 5.000,01 a R$ 10.000,00">De R$ 5.000,01 a R$ 10.000,00</option>
+              <option value="Acima de R$ 10.000,00">Acima de R$ 10.000,00</option>
+            </select>
+          </div>
+
+          <div class="input-field">
+            <label for="ob-comissao">Comissão Média *</label>
+            <select id="ob-comissao" required>
+              <option value="">Selecione...</option>
+              <option value="Menos que 1%">Menos que 1%</option>
+              <option value="Entre 1% e 3%">Entre 1% e 3%</option>
+              <option value="Entre 3% e 5%">Entre 3% e 5%</option>
+              <option value="Entre 5% e 10%">Entre 5% e 10%</option>
+              <option value="Entre 10% e 15%">Entre 10% e 15%</option>
+              <option value="Entre 15% e 30%">Entre 15% e 30%</option>
+              <option value="Maior que 30%">Maior que 30%</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="ob-lgpd" required checked>
+          <label for="ob-lgpd">Concordo em receber comunicações, treinamentos e ofertas exclusivas do Grupo Altus Educacional.</label>
+        </div>
+
+        <button type="submit" class="btn-submit-onboarding" id="btn-salvar-ob">🚀 LIBERAR MEU RADAR GRATUITO</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <!-- SIDEBAR / HEADER FIXO MOBILE -->
+    <div class="sidebar">
+      <div class="sidebar-top">
+        <div class="brand-container" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+          <img src="logo.png" alt="Logo Radar 10K+" class="brand-logo" onerror="this.style.display='none'">
+          <div class="brand-title">📡 RADAR 10K+</div>
+        </div>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="btn-theme-text">☀️ Modo Claro</button>
+      </div>
+
+      <div class="banner-cta">
+        <h4>🚀 Quer automatizar seu controle diário?</h4>
+        <p>Conheça a versão completa com rastreamento de comissões em tempo real, simulação de descontos e sincronização.</p>
+        <a href="https://sun.eduzz.com/8WPND45N0P" class="btn-upgrade">Conhecer Radar 10K+ Full</a>
+      </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="main-content">
+      <div class="content-body">
+        <h1>Calculadora & Planejador de Metas</h1>
+        <p class="subtitle">Preencha seus dados de entrada para descobrir exatamente quanto você precisa vender e atender por dia para bater sua meta!</p>
+
+        <!-- SEÇÃO 1: ENTRADA DE DADOS -->
+        <div class="section-title">✏️ 1. Dados de Entrada</div>
+        <div class="form-container">
+          <div class="form-grid">
+            
+            <div class="input-field">
+              <label for="salario-pretendido">Salário Pretendido Total (R$)</label>
+              <input type="text" id="salario-pretendido" inputmode="decimal" value="R$ 10.000,00" oninput="mascaraMoedaInput(this); calcularPlanejamento()">
+              <small>Quanto você quer colocar no bolso no mês</small>
+            </div>
+
+            <div class="input-field">
+              <label for="salario-fixo">Salário Fixo / Ajuda de Custo (R$)</label>
+              <input type="text" id="salario-fixo" inputmode="decimal" value="R$ 2.000,00" oninput="mascaraMoedaInput(this); calcularPlanejamento()">
+              <small>Seu fixo CLT ou ajuda de custo (0 se for 100% comissão)</small>
+            </div>
+
+            <div class="input-field">
+              <label for="comissao-media">Comissão Média (%)</label>
+              <input type="number" id="comissao-media" inputmode="decimal" value="5" step="any" oninput="calcularPlanejamento()">
+              <small>Percentual médio recebido sobre as vendas</small>
+            </div>
+
+            <div class="input-field">
+              <label for="taxa-conversao-media">Taxa de Conversão Média (%)</label>
+              <input type="number" id="taxa-conversao-media" inputmode="decimal" value="10" step="any" oninput="calcularPlanejamento()">
+              <small>De 100 clientes atendidos, quantos compram?</small>
+            </div>
+
+            <div class="input-field">
+              <label for="ticket-medio">Ticket Médio por Venda (R$)</label>
+              <input type="text" id="ticket-medio" inputmode="decimal" value="R$ 500,00" oninput="mascaraMoedaInput(this); calcularPlanejamento()">
+              <small>Valor médio de cada venda realizada</small>
+            </div>
+
+            <div class="input-field">
+              <label for="dias-trabalhados">Dias Trabalhados no Mês</label>
+              <input type="number" id="dias-trabalhados" inputmode="numeric" value="22" oninput="calcularPlanejamento()">
+              <small>Dias úteis de vendas no mês</small>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SEÇÃO 2: RESULTADOS -->
+        <div class="section-title">📊 2. Resultados & Metas Necessárias</div>
+        <div class="grid-cards">
+          
+          <div class="card">
+            <h4>Meta de Comissão (R$)</h4>
+            <div class="val orange" id="res-meta-comissao">R$ 0,00</div>
+            <small>Valor necessário de comissão</small>
+          </div>
+
+          <div class="card">
+            <h4>Faturamento / Vendas (R$)</h4>
+            <div class="val blue" id="res-meta-faturamento">R$ 0,00</div>
+            <small>Faturamento total necessário</small>
+          </div>
+
+          <div class="card">
+            <h4>Vendas Necessárias (Mês)</h4>
+            <div class="val" id="res-vendas-mes">0</div>
+            <small>Qtd total de vendas no mês</small>
+          </div>
+
+          <div class="card">
+            <h4>Vendas / Dia</h4>
+            <div class="val yellow" id="res-vendas-dia">0,0</div>
+            <small>Média diária de vendas</small>
+          </div>
+
+          <div class="card">
+            <h4>Leads / Atendimentos (Mês)</h4>
+            <div class="val" id="res-leads-mes">0</div>
+            <small>Total de abordagens no mês</small>
+          </div>
+
+          <div class="card">
+            <h4>Leads / Atendimentos (Dia)</h4>
+            <div class="val orange" id="res-leads-dia">0</div>
+            <small>Abordagens necessárias por dia</small>
+          </div>
+
+        </div>
+      </div>
+
+      <footer class="app-footer">
+        <p>© 2026 <strong>Grupo Altus Educacional</strong>. Todos os direitos reservados.</p>
+        <p style="font-size: 0.72rem; margin-top: 4px; opacity: 0.75;">Tecnologia e Inteligência em Vendas. Proibida a reprodução parcial ou total do software.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const API_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxUi5jT452p-U3lpaMmin0RNzRN4AbuPjcq6JZegSHiJxPfpBcYRc1Iaeu_KxbVkMrKfQ/exec";
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-theme');
+      const isLight = document.body.classList.contains('light-theme');
+      document.getElementById('btn-theme-text').innerText = isLight ? '🌙 Modo Escuro' : '☀️ Modo Claro';
+    }
+
+    function parseMoedaFloat(str) {
+      if (typeof str === 'number') return str;
+      if (!str) return 0;
+      return parseFloat(str.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+    }
+
+    function formatarMoeda(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function mascaraMoedaInput(input) {
+      let v = input.value.replace(/\D/g, '');
+      v = (v / 100).toFixed(2) + '';
+      v = v.replace(".", ",");
+      v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+      input.value = "R$ " + v;
+    }
+
+    function calcularPlanejamento() {
+      const salarioPretendido = parseMoedaFloat(document.getElementById('salario-pretendido').value);
+      const salarioFixo = parseMoedaFloat(document.getElementById('salario-fixo').value);
+      const comissaoPct = (parseFloat(document.getElementById('comissao-media').value) || 0) / 100;
+      const conversaoPct = (parseFloat(document.getElementById('taxa-conversao-media').value) || 0) / 100;
+      const ticketMedio = parseMoedaFloat(document.getElementById('ticket-medio').value);
+      const diasTrabalhados = parseFloat(document.getElementById('dias-trabalhados').value) || 1;
+
+      let metaComissao = salarioPretendido - salarioFixo;
+      if (metaComissao < 0) metaComissao = 0;
+
+      let faturamentoNecessario = comissaoPct > 0 ? (metaComissao / comissaoPct) : 0;
+      let vendasMes = ticketMedio > 0 ? (faturamentoNecessario / ticketMedio) : 0;
+      let vendasDia = diasTrabalhados > 0 ? (vendasMes / diasTrabalhados) : 0;
+      let leadsMes = conversaoPct > 0 ? (vendasMes / conversaoPct) : 0;
+      let leadsDia = diasTrabalhados > 0 ? (leadsMes / diasTrabalhados) : 0;
+
+      document.getElementById('res-meta-comissao').innerText = formatarMoeda(metaComissao);
+      document.getElementById('res-meta-faturamento').innerText = formatarMoeda(faturamentoNecessario);
+      document.getElementById('res-vendas-mes').innerText = Math.round(vendasMes).toLocaleString('pt-BR');
+      document.getElementById('res-vendas-dia').innerText = vendasDia.toFixed(1).replace('.', ',');
+      document.getElementById('res-leads-mes').innerText = Math.round(leadsMes).toLocaleString('pt-BR');
+      document.getElementById('res-leads-dia').innerText = Math.round(leadsDia).toLocaleString('pt-BR');
+    }
+
+    /* ONBOARDING CONTROLLER */
+    function checarSegmentoOutro(select) {
+      const box = document.getElementById('box-segmento-outro');
+      box.style.display = select.value === "Outros" ? "flex" : "none";
+    }
+
+    function verificarOnboarding() {
+      const leadConcluido = localStorage.getItem('altus_radar_free_concluido');
+      if (!leadConcluido) {
+        document.getElementById('modal-onboarding').style.display = 'flex';
+      }
+    }
+
+    async function salvarOnboarding(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-salvar-ob');
+      btn.disabled = true;
+      btn.innerText = "⏳ SALVANDO E LIBERANDO...";
+
+      const payload = {
+        action: "salvar_onboarding",
+        email: document.getElementById('ob-email').value,
+        cidade: document.getElementById('ob-cidade').value,
+        estado: document.getElementById('ob-estado').value,
+        segmento: document.getElementById('ob-segmento').value,
+        segmento_outro: document.getElementById('ob-segmento-outro').value,
+        faixa_renda: document.getElementById('ob-faixa-renda').value,
+        comissao_media: document.getElementById('ob-comissao').value,
+        aceite_lgpd: document.getElementById('ob-lgpd').checked
+      };
+
+      try {
+        await fetch(API_APPS_SCRIPT, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        localStorage.setItem('altus_radar_free_concluido', 'true');
+        document.getElementById('modal-onboarding').style.display = 'none';
+      } catch (err) {
+        alert("Erro ao conectar. Tente novamente.");
+        btn.disabled = false;
+        btn.innerText = "🚀 LIBERAR MEU RADAR GRATUITO";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      calcularPlanejamento();
+      verificarOnboarding();
+    });
+  </script>
+</body>
+</html>
