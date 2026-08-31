@@ -412,14 +412,14 @@
           </div>
           <div class="input-field">
             <label for="ob-telefone">WhatsApp (DDD) *</label>
-            <input type="tel" id="ob-telefone" required placeholder="(45) 99999-9999" oninput="mascaraTelefone(this)">
+            <input type="tel" id="ob-telefone" required placeholder="(99) 99999-9999" oninput="mascaraTelefone(this)">
           </div>
         </div>
 
         <div class="modal-grid">
           <div class="input-field">
             <label for="ob-cidade">Cidade *</label>
-            <input type="text" id="ob-cidade" required placeholder="Ex: Cascavel">
+            <input type="text" id="ob-cidade" required placeholder="Ex: São Paulo">
           </div>
           <div class="input-field">
             <label for="ob-estado">Estado *</label>
@@ -685,7 +685,7 @@
     }
 
     function verificarOnboarding() {
-      const statusOnboarding = localStorage.getItem('altus_radar_free_v3_ok');
+      const statusOnboarding = localStorage.getItem('altus_radar_free_v4_ok');
       if (statusOnboarding !== 'true') {
         const modal = document.getElementById('modal-onboarding');
         if (modal) {
@@ -723,7 +723,7 @@
           body: JSON.stringify(payload)
         });
 
-        localStorage.setItem('altus_radar_free_v3_ok', 'true');
+        localStorage.setItem('altus_radar_free_v4_ok', 'true');
         document.getElementById('modal-onboarding').style.display = 'none';
       } catch (err) {
         alert("Erro ao conectar. Tente novamente.");
